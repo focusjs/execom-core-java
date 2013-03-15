@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+</head>
+
+<body>
+	<div style="background-color: #003d67;">
+		<span
+			style="font-size: 30px; color: white; margin-top: 15px; margin-bottom: 15px; margin-right: 40px; float: right;"><img
+			src="cid:${HEADER}" alt="Sport" /> </span>
+	</div>
+	<div>
+		<h3
+			style="padding-bottom: 20px; font-weight: normal; color: #2F8ACC; margin: 0; font-size: 22px;">Welcome
+			${user.firstName},</h3>
+		<p>Click on the link below to confirm your account, and you&#39;re
+			good to go!</p>
+		<p>
+			<a href="${siteUrl}?registration=${user.activationCode}"
+				style="color: #2F8ACC;">${siteUrl}?activation=${user.activationCode}</a>
+		</p>
+	</div>
+	<div
+		style="text-align: center; color: #666666; font-size: 10px; padding-top: 5px;">
+		Copyright&#169; ExeCom</div>
+
+</body>
+</html>
