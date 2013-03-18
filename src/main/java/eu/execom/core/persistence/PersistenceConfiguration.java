@@ -16,6 +16,8 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
+import eu.execom.core.model.City;
+import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 
 /**
@@ -76,7 +78,7 @@ public class PersistenceConfiguration {
         props.put("hibernate.hbm2ddl.auto", "validate");
 
         LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
-        bean.setAnnotatedClasses(new Class[] {User.class});
+        bean.setAnnotatedClasses(new Class[] {User.class, Country.class, City.class});
         bean.setHibernateProperties(props);
         bean.setDataSource(dataSource);
         return bean;
@@ -98,7 +100,7 @@ public class PersistenceConfiguration {
      * Liquibase initialization.
      * 
      * @param dataSource
-     *            to be used for DB comunication.
+     *            to be used for DB communication.
      * @return {@link SpringLiquibase}.
      */
     @Bean

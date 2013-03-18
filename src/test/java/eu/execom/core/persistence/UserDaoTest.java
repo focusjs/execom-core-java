@@ -1,12 +1,11 @@
-package eu.execom.core.persitance;
+package eu.execom.core.persistence;
 
 import org.junit.Before;
 
 import eu.execom.core.model.User;
-import eu.execom.core.persistence.UserDao;
 
 /**
- * {@link UserDao} test.
+ * {@link UserHibernateDao} test.
  * 
  * @author Dusko Vesin
  */

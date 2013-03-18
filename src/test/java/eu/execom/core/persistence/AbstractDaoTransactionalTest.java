@@ -1,10 +1,12 @@
-package eu.execom.core.persitance;
+package eu.execom.core.persistence;
 
 import java.util.List;
 
 import org.junit.Test;
 
 import eu.execom.core.model.AbstractEntity;
+import eu.execom.core.model.City;
+import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.persistence.base.GenericDao;
 
@@ -133,6 +135,10 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> ext
 
         if (getEntityClass().equals(User.class)) {
             return (GenericDao<T>) getUserDao();
+        } else if (getEntityClass().equals(Country.class)) {
+            return (GenericDao<T>) getCountryDao();
+        } else if (getEntityClass().equals(City.class)) {
+            return (GenericDao<T>) getCityDao();
         } else {
             throw new IllegalStateException(getEntityClass() + " unsupported");
         }

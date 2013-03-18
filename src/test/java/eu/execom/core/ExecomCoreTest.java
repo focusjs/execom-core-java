@@ -18,10 +18,14 @@ import eu.execom.core.dto.UserTableDto;
 import eu.execom.core.dto.authentication.AuthenticationResponseDto;
 import eu.execom.core.dto.authentication.CredentialsDto;
 import eu.execom.core.model.AbstractEntity;
+import eu.execom.core.model.City;
+import eu.execom.core.model.Country;
 import eu.execom.core.model.Gender;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
 import eu.execom.core.model.UserStatus;
+import eu.execom.core.persistence.CityDao;
+import eu.execom.core.persistence.CountryDao;
 import eu.execom.core.persistence.UserDao;
 import eu.execom.testutil.AbstractExecomRepositoryAssert;
 
@@ -39,9 +43,17 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private CountryDao countryDao;
+
+    @Autowired
+    private CityDao cityDao;
+
     @Override
     protected void initEntityList(final List<Class<?>> entityTypes) {
         entityTypes.add(User.class);
+        entityTypes.add(Country.class);
+        entityTypes.add(City.class);
     }
 
     @After
@@ -69,6 +81,12 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
         if (entityClass == User.class) {
             return userDao.findAll();
         }
+        if (entityClass == Country.class) {
+            return countryDao.findAll();
+        }
+        if (entityClass == City.class) {
+            return cityDao.findAll();
+        }
         throw new IllegalStateException("Unsupported entity class " + entityClass);
     }
 
@@ -76,6 +94,12 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
     protected AbstractEntity findById(final Class<?> entityClass, final Long id) {
         if (entityClass == User.class) {
             return userDao.findById(id);
+        }
+        if (entityClass == Country.class) {
+            return countryDao.findById(id);
+        }
+        if (entityClass == City.class) {
+            return cityDao.findById(id);
         }
         throw new IllegalStateException("Unsupported entity class " + entityClass);
     }
@@ -85,6 +109,23 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
         assertEquals(expected, actual);
     }
 
+    /**
+     * @return the cityDao
+     */
+    public CityDao getCityDao() {
+        return cityDao;
+    }
+
+    /**
+     * @return the countryDao
+     */
+    public CountryDao getCountryDao() {
+        return countryDao;
+    }
+
+    /**
+     * @return the userDao
+     */
     public UserDao getUserDao() {
         return userDao;
     }
@@ -97,7 +138,6 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
     protected User createUniqueUser(final int uniqueInt) {
         final User uniqueUser = new User();
 
-        uniqueUser.setId(Long.valueOf(uniqueInt));
         uniqueUser.setFirstName("First name " + uniqueInt);
         uniqueUser.setLastName("Last name " + uniqueInt);
         uniqueUser.setEmail("uniq" + uniqueInt + "@email.com");
@@ -110,6 +150,27 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
         uniqueUser.setBirthDate(new Date());
 
         return uniqueUser;
+    }
+
+    /**
+     * Create unique country entity.
+     * 
+     * @return {@link Country}
+     */
+    protected Country createUniqueCountry(final int uniqueInt) {
+        final Country country = new Country();
+        country.setName("Country" + uniqueInt);
+        return country;
+    }
+
+    protected City createUniqueCity(final Integer unique, final Country country) {
+        City city = new City();
+        city.setCountry(country);
+        city.setLatitude("latitude");
+        city.setLongitude("longitud");
+        city.setName("name" + unique);
+        city.setPostacityCode("postal" + unique);
+        return city;
     }
 
     protected UserAddDto createUniqueAddUserDto(final int uniqueInt) {

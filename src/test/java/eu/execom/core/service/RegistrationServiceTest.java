@@ -66,7 +66,7 @@ public class RegistrationServiceTest extends AbstractServiceTest {
         assertObject(user, changed(User.FIRSTNAME, dto.getFirstName()), changed(User.EMAIL, dto.getEmail()),
                 changed(User.LASTNAME, dto.getLastName()), changed(User.STATUS, UserStatus.PENDING_EMAIL_REGISTRATION),
                 nulll(User.AUTHENTICATIONCODE), nulll(User.RECOVERYPASSWORD), notNull(User.ACTIVATIONCODE),
-                changed(User.ROLE, UserRole.USER), notNull(User.ID), notNull(User.PASSWORD),
+                changed(User.ROLE, UserRole.USER), notNull(User.ID), notNull(User.PASSWORD), nulll(User.ADDRESS),
                 changed(User.GENDER, dto.getGender()), changed(User.BIRTHDATE, dto.getBirthDate()));
 
     }

@@ -96,8 +96,9 @@ public class UserServiceTest extends AbstractServiceTest {
                 changed(User.EMAIL, addUserDto.getEmail()), changed(User.GENDER, addUserDto.getGender()),
                 changed(User.LASTNAME, addUserDto.getLastName()),
                 changed(User.STATUS, UserStatus.PENDING_EMAIL_REGISTRATION), nulll(User.AUTHENTICATIONCODE),
-                nulll(User.RECOVERYPASSWORD), nulll(User.ACTIVATIONCODE), changed(User.ROLE, addUserDto.getRole()),
-                notNull(User.ID), notNull(User.PASSWORD), changed(User.BIRTHDATE, addUserDto.getBirthDate()));
+                nulll(User.RECOVERYPASSWORD), nulll(User.ADDRESS), nulll(User.ACTIVATIONCODE),
+                changed(User.ROLE, addUserDto.getRole()), notNull(User.ID), notNull(User.PASSWORD),
+                changed(User.BIRTHDATE, addUserDto.getBirthDate()));
 
     }
 

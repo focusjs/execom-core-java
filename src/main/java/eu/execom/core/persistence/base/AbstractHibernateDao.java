@@ -27,10 +27,6 @@ import eu.execom.core.model.AbstractEntity;
 public abstract class AbstractHibernateDao<T extends AbstractEntity> implements GenericDao<T> {
 
     /**
-     * Path separator for hibernate aliases. Value: {@value DOT}
-     */
-    protected static final String DOT = ".";
-    /**
      * Field PERCENT. (value is ""%"") Value: {@value PERCENT}
      */
     protected static final String PERCENT = "%";

@@ -1,4 +1,4 @@
-package eu.execom.core.persitance;
+package eu.execom.core.persistence;
 
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;

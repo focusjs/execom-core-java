@@ -3,6 +3,7 @@ package eu.execom.core.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -62,6 +63,10 @@ public class User extends AbstractEntity {
     @Column(name = "lastName", nullable = false, unique = false)
     private String lastName;
     public static final String LASTNAME = "lastName";
+
+    @Embedded
+    private Address address;
+    public static final String ADDRESS = "address";
 
     /**
      * @return the email
@@ -226,5 +231,20 @@ public class User extends AbstractEntity {
      */
     public void setFirstName(final String firstName) {
         this.firstName = firstName;
+    }
+
+    /**
+     * @return the address
+     */
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address
+     *            the address to set
+     */
+    public void setAddress(final Address address) {
+        this.address = address;
     }
 }
