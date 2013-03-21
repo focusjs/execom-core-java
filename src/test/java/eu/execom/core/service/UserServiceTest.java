@@ -14,6 +14,8 @@ import eu.execom.core.dto.UserSearchDto;
 import eu.execom.core.dto.UserTableDto;
 import eu.execom.core.dto.base.SearchOrder;
 import eu.execom.core.dto.base.SearchResultDto;
+import eu.execom.core.model.City;
+import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
 import eu.execom.core.model.UserStatus;
@@ -25,6 +27,9 @@ import eu.execom.core.model.UserStatus;
  */
 public class UserServiceTest extends AbstractServiceTest {
 
+    private Country country;
+    private City city;
+
     @Autowired
     private UserServiceImpl userService;
 
@@ -33,6 +38,11 @@ public class UserServiceTest extends AbstractServiceTest {
      */
     @Before
     public void setUp() {
+        country = createUniqueCountry(1);
+        getCountryDao().save(country);
+
+        city = createUniqueCity(1, country);
+        getCityDao().save(city);
     }
 
     /**
@@ -43,14 +53,14 @@ public class UserServiceTest extends AbstractServiceTest {
         // init
         final int maxRowCount = 4;
         int unique = 0;
-        final User user0 = createUniqueUser(unique++);
-        final User user1 = createUniqueUser(unique++);
-        final User user2 = createUniqueUser(unique++);
-        final User user3 = createUniqueUser(unique++);
-        final User user4 = createUniqueUser(unique++);
-        final User user5 = createUniqueUser(unique++);
-        final User user6 = createUniqueUser(unique++);
-        final User user7 = createUniqueUser(unique++);
+        final User user0 = createUniqueUser(unique++, city);
+        final User user1 = createUniqueUser(unique++, city);
+        final User user2 = createUniqueUser(unique++, city);
+        final User user3 = createUniqueUser(unique++, city);
+        final User user4 = createUniqueUser(unique++, city);
+        final User user5 = createUniqueUser(unique++, city);
+        final User user6 = createUniqueUser(unique++, city);
+        final User user7 = createUniqueUser(unique++, city);
         getUserDao().save(user0);
         getUserDao().save(user1);
         getUserDao().save(user2);
@@ -109,7 +119,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testUpdateUser() {
 
         // init
-        final User editUser = createUniqueUser(1);
+        final User editUser = createUniqueUser(1, city);
         getUserDao().save(editUser);
 
         final UserEditDto userEditDto = createUniqueEditUserDto(2);
@@ -135,7 +145,7 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void testGetUserEditDto() {
         // init
-        final User user = createUniqueUser(2);
+        final User user = createUniqueUser(2, city);
         getUserDao().save(user);
 
         // method
@@ -157,7 +167,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testIsEmailInUseExisting() {
 
         // init
-        final User user = createUniqueUser(2);
+        final User user = createUniqueUser(2, city);
         getUserDao().save(user);
 
         // method
@@ -174,7 +184,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testIsEmailInUseNonExisting() {
 
         // init
-        final User user = createUniqueUser(2);
+        final User user = createUniqueUser(2, city);
         getUserDao().save(user);
 
         // method
@@ -191,7 +201,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testIsActivationCodeInUseExisting() {
 
         // init
-        final User user = createUniqueUser(2);
+        final User user = createUniqueUser(2, city);
         getUserDao().save(user);
 
         // method
@@ -208,7 +218,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testIsActivationCodeInUseNonExisting() {
 
         // init
-        final User user = createUniqueUser(2);
+        final User user = createUniqueUser(2, city);
         getUserDao().save(user);
 
         // method
@@ -225,7 +235,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testIsAuthenticationCodeInUseExisting() {
 
         // init
-        final User user = createUniqueUser(2);
+        final User user = createUniqueUser(2, city);
         getUserDao().save(user);
 
         // method
@@ -242,7 +252,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testIsAuthenticationCodeInUseNonExisting() {
 
         // init
-        final User user = createUniqueUser(2);
+        final User user = createUniqueUser(2, city);
         getUserDao().save(user);
 
         // method

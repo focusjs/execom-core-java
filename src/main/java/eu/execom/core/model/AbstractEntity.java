@@ -55,6 +55,6 @@ public class AbstractEntity {
         }
         String path = pathBuilder.toString();
 
-        return path.substring(0, path.length() - 2);
+        return path.substring(0, path.length() - 1);
     }
 }

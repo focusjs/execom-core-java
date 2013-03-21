@@ -16,15 +16,6 @@ import eu.execom.core.model.User;
 public interface UserService {
 
     /**
-     * Convert {@link User} to {@link UserAddDto}.
-     * 
-     * @param entity
-     *            to be converted
-     * @return {@link UserAddDto}
-     */
-    UserAddDto convertToUserAddDtoFrom(User entity);
-
-    /**
      * COnvert {@link User} to {@link UserEditDto}.
      * 
      * @param entity

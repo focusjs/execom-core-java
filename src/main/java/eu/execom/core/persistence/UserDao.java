@@ -3,6 +3,8 @@ package eu.execom.core.persistence;
 import java.util.List;
 
 import eu.execom.core.dto.UserSearchDto;
+import eu.execom.core.dto.UsersTypeCountDto;
+import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
 import eu.execom.core.persistence.base.GenericDao;
@@ -68,4 +70,20 @@ public interface UserDao extends GenericDao<User> {
      * @return {@link List} of matching {@link User}s
      */
     List<User> findByRole(UserRole role);
+
+    /**
+     * Find all users, with {@link UserRole#ADMIN} users first.
+     * 
+     * @return {@link List} of {@link User}
+     */
+    List<User> findAllAdminsFirst();
+
+    /**
+     * Get country of users per role in specified countries, if countries is null then count for all countries.
+     * 
+     * @param forCountries
+     *            countries to which users belongs to
+     * @return {@link List} of {@link UsersTypeCountDto}.
+     */
+    List<UsersTypeCountDto> getUserCountInCountriesPerRole(List<Country> forCountries);
 }

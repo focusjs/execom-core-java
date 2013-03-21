@@ -33,22 +33,6 @@ class UserServiceImpl implements UserService {
     private UserDao dao;
 
     @Override
-    public UserAddDto convertToUserAddDtoFrom(final User entity) {
-
-        UserAddDto dto = new UserAddDto();
-        dto.setEmail(entity.getEmail());
-        dto.setPassword(entity.getPassword());
-        dto.setPasswordRe(entity.getPassword());
-        dto.setRole(entity.getRole());
-        dto.setBirthDate(entity.getBirthDate());
-        dto.setGender(entity.getGender());
-        dto.setFirstName(entity.getFirstName());
-        dto.setLastName(entity.getLastName());
-
-        return dto;
-    }
-
-    @Override
     public UserEditDto convertToUserEditDtoFrom(final User entity) {
 
         UserEditDto dto = new UserEditDto();

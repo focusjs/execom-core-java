@@ -15,9 +15,11 @@ import eu.execom.core.dto.UserAddDto;
 import eu.execom.core.dto.UserEditDto;
 import eu.execom.core.dto.UserSearchDto;
 import eu.execom.core.dto.UserTableDto;
+import eu.execom.core.dto.UsersTypeCountDto;
 import eu.execom.core.dto.authentication.AuthenticationResponseDto;
 import eu.execom.core.dto.authentication.CredentialsDto;
 import eu.execom.core.model.AbstractEntity;
+import eu.execom.core.model.Address;
 import eu.execom.core.model.City;
 import eu.execom.core.model.Country;
 import eu.execom.core.model.Gender;
@@ -69,6 +71,7 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
         complexTypes.add(AuthenticationResponseDto.class);
         complexTypes.add(UserSearchDto.class);
         complexTypes.add(UserTableDto.class);
+        complexTypes.add(UsersTypeCountDto.class);
     }
 
     @Override
@@ -135,7 +138,7 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
      * 
      * @return {@link User}
      */
-    protected User createUniqueUser(final int uniqueInt) {
+    protected User createUniqueUser(final int uniqueInt, final City city) {
         final User uniqueUser = new User();
 
         uniqueUser.setFirstName("First name " + uniqueInt);
@@ -148,6 +151,12 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
         uniqueUser.setRole(UserRole.USER);
         uniqueUser.setGender(Gender.MALE);
         uniqueUser.setBirthDate(new Date());
+
+        Address address = new Address();
+        address.setCity(city);
+        address.setStreet("Street" + uniqueUser);
+        address.setStreetNumber("StreetNumber" + uniqueInt);
+        uniqueUser.setAddress(address);
 
         return uniqueUser;
     }

@@ -12,8 +12,8 @@ import eu.execom.core.dto.AbstractDto;
  */
 public class SearchResultDto<T> extends AbstractDto {
 
-    private List<T> results;
-    private Long totalCount;
+    private final List<T> results;
+    private final Long totalCount;
 
     /**
      * Default constructor.
@@ -39,32 +39,12 @@ public class SearchResultDto<T> extends AbstractDto {
     }
 
     /**
-     * Set results.
-     * 
-     * @param results
-     *            result {@link List}.
-     */
-    public void setResults(final List<T> results) {
-        this.results = results;
-    }
-
-    /**
      * Total result count.
      * 
      * @return result count.
      */
     public Long getTotalCount() {
         return totalCount;
-    }
-
-    /**
-     * Set total count .
-     * 
-     * @param totalCount
-     *            count of total results.
-     */
-    public void setTotalCount(final Long totalCount) {
-        this.totalCount = totalCount;
     }
 
 }
