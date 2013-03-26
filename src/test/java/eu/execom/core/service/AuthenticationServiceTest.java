@@ -1,10 +1,12 @@
 package eu.execom.core.service;
 
-import static eu.execom.testutil.property.Property.changed;
-import static eu.execom.testutil.property.Property.notNull;
-import static eu.execom.testutil.property.Property.nulll;
+import static eu.execom.fabut.Fabut.isNull;
+import static eu.execom.fabut.Fabut.notNull;
+import static eu.execom.fabut.Fabut.value;
 
 import java.util.Date;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,7 @@ import eu.execom.core.dto.authentication.CredentialsDto;
 import eu.execom.core.dto.authentication.RegistrationDto;
 import eu.execom.core.model.Gender;
 import eu.execom.core.model.User;
+import eu.execom.fabut.Fabut;
 
 /**
  * Contains tests for authentication service.
@@ -42,7 +45,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         initServiceImpl.initAdminUser();
 
         // init
-        RegistrationDto dto = new RegistrationDto();
+        final RegistrationDto dto = new RegistrationDto();
         dto.setEmail(EMAIL);
         dto.setPassword(PASSWORD);
         dto.setFirstName("First");
@@ -52,10 +55,10 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         registrationServiceImpl.register(dto);
 
-        User user = getUserDao().findByEmail(EMAIL);
+        final User user = getUserDao().findByEmail(EMAIL);
         registrationServiceImpl.activateUserWithActivationCode(user.getActivationCode());
 
-        takeSnapshot();
+        initWizer();
     }
 
     @Autowired
@@ -75,17 +78,19 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         loginDto.setPassword(PASSWORD);
 
         // method
-        takeSnapshot();
+        Fabut.takeSnapshot();
+        initWizer();
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
-        User user = getUserDao().findByEmail(EMAIL);
+        final User user = getUserDao().findByEmail(EMAIL);
         // assert
-        assertEntityWithSnapshot(user, notNull(User.AUTHENTICATIONCODE));
+        Fabut.assertEntityWithSnapshot(user, notNull(User.AUTHENTICATIONCODE));
 
-        assertNotNull(response);
-        assertObject(response, changed(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
-                changed(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
-                changed(AuthenticationResponseDto.ROLE, user.getRole()));
+        Assert.assertNotNull(response);
+        Fabut.assertObject(response,
+                value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
+                value(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
+                value(AuthenticationResponseDto.ROLE, user.getRole()));
 
     }
 
@@ -103,11 +108,11 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         loginDto.setPassword(PASSWORD);
 
         // method
-        takeSnapshot();
+        initWizer();
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         // assert
-        assertNull(response);
+        Assert.assertNull(response);
     }
 
     /**
@@ -125,11 +130,11 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         loginDto.setPassword("bad");
 
         // method
-        takeSnapshot();
+        initWizer();
         authenticationServiceImpl.authenticate(loginDto);
 
         // assert
-        fail();
+        Assert.fail();
     }
 
     /**
@@ -141,26 +146,28 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
     public void testAuthenticate_withRecoveryPassword() throws AuthenticationException {
 
         // init
-        String newPassword = registrationServiceImpl.resetPassword(EMAIL);
+        final String newPassword = registrationServiceImpl.resetPassword(EMAIL);
 
         final CredentialsDto loginDto = new CredentialsDto();
         loginDto.setEmail(EMAIL);
         loginDto.setPassword(newPassword);
 
         // method
-        takeSnapshot();
+        Fabut.takeSnapshot();
+        initWizer();
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         // assert
-        User user = getUserDao().findByEmail(EMAIL);
+        final User user = getUserDao().findByEmail(EMAIL);
 
-        assertNotNull(response);
-        assertObject(response, changed(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
-                changed(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
-                changed(AuthenticationResponseDto.ROLE, user.getRole()));
+        Assert.assertNotNull(response);
+        Fabut.assertObject(response,
+                value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
+                value(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
+                value(AuthenticationResponseDto.ROLE, user.getRole()));
 
-        assertEntityWithSnapshot(user, nulll(User.RECOVERYPASSWORD), notNull(User.AUTHENTICATIONCODE),
-                changed(User.PASSWORD, passwordEncoder.encodePassword(newPassword, EMAIL)));
+        Fabut.assertEntityWithSnapshot(user, isNull(User.RECOVERYPASSWORD), notNull(User.AUTHENTICATIONCODE),
+                value(User.PASSWORD, passwordEncoder.encodePassword(newPassword, EMAIL)));
 
     }
 
@@ -180,17 +187,18 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         authenticationServiceImpl.authenticate(loginDto);
 
-        User user = getUserDao().findByEmail(EMAIL);
+        final User user = getUserDao().findByEmail(EMAIL);
 
-        takeSnapshot();
+        initWizer();
         // method
-        AuthenticationResponseDto response = authenticationServiceImpl.authenticate(user.getAuthenticationCode());
+        final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(user.getAuthenticationCode());
 
         // assert
-        assertNotNull(response);
-        assertObject(response, changed(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
-                changed(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
-                changed(AuthenticationResponseDto.ROLE, user.getRole()));
+        Assert.assertNotNull(response);
+        Fabut.assertObject(response,
+                value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
+                value(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
+                value(AuthenticationResponseDto.ROLE, user.getRole()));
 
     }
 
@@ -215,7 +223,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
     public void testLogout() throws AuthenticationException {
 
         // init
-        User user = getUserDao().findByEmail(EMAIL);
+        final User user = getUserDao().findByEmail(EMAIL);
 
         final CredentialsDto loginDto = new CredentialsDto();
         loginDto.setEmail(EMAIL);
@@ -224,11 +232,12 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         // method
-        takeSnapshot();
+        Fabut.takeSnapshot();
+        initWizer();
         authenticationServiceImpl.logout(response.getAuthenticationCode());
 
         // assert
-        assertEntityWithSnapshot(user, nulll(User.AUTHENTICATIONCODE));
+        Fabut.assertEntityWithSnapshot(user, isNull(User.AUTHENTICATIONCODE));
     }
 
 }

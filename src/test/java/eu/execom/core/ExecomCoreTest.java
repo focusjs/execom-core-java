@@ -1,9 +1,13 @@
 package eu.execom.core;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.junit.After;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -18,7 +22,6 @@ import eu.execom.core.dto.UserTableDto;
 import eu.execom.core.dto.UsersTypeCountDto;
 import eu.execom.core.dto.authentication.AuthenticationResponseDto;
 import eu.execom.core.dto.authentication.CredentialsDto;
-import eu.execom.core.model.AbstractEntity;
 import eu.execom.core.model.Address;
 import eu.execom.core.model.City;
 import eu.execom.core.model.Country;
@@ -29,7 +32,8 @@ import eu.execom.core.model.UserStatus;
 import eu.execom.core.persistence.CityDao;
 import eu.execom.core.persistence.CountryDao;
 import eu.execom.core.persistence.UserDao;
-import eu.execom.testutil.AbstractExecomRepositoryAssert;
+import eu.execom.fabut.Fabut;
+import eu.execom.fabut.IFabutRepositoryTest;
 
 /**
  * {@link AbstractExecomRepositoryAssert} implementation with specific adjustments for project.
@@ -40,7 +44,7 @@ import eu.execom.testutil.AbstractExecomRepositoryAssert;
 @TransactionConfiguration(defaultRollback = true)
 @Transactional
 @EnableTransactionManagement(proxyTargetClass = true)
-public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<AbstractEntity, Long> {
+public abstract class ExecomCoreTest implements IFabutRepositoryTest {
 
     @Autowired
     private UserDao userDao;
@@ -52,19 +56,20 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
     private CityDao cityDao;
 
     @Override
-    protected void initEntityList(final List<Class<?>> entityTypes) {
-        entityTypes.add(User.class);
-        entityTypes.add(Country.class);
-        entityTypes.add(City.class);
-    }
-
-    @After
-    public final void checkTestValidity() {
-        assertDbState();
+    @Before
+    public void beforeTest() {
+        Fabut.beforeTest(this);
     }
 
     @Override
-    protected void initComplexTypes(final List<Class<?>> complexTypes) {
+    @After
+    public void afterTest() {
+        Fabut.afterTest();
+    }
+
+    @Override
+    public List<Class<?>> getComplexTypes() {
+        final List<Class<?>> complexTypes = new LinkedList<Class<?>>();
         complexTypes.add(UserAddDto.class);
         complexTypes.add(UserEditDto.class);
         complexTypes.add(CredentialsDto.class);
@@ -72,15 +77,39 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
         complexTypes.add(UserSearchDto.class);
         complexTypes.add(UserTableDto.class);
         complexTypes.add(UsersTypeCountDto.class);
+        return complexTypes;
     }
 
     @Override
-    protected void initIgnoredTypes(final List<Class<?>> ignoredTypes) {
-        // no ignored types
+    public List<Class<?>> getIgnoredTypes() {
+        return new LinkedList<Class<?>>();
     }
 
     @Override
-    protected List<?> findAll(final Class<?> entityClass) {
+    public Object findById(final Class<?> entityClass, final Object id) {
+        if (entityClass == User.class) {
+            return userDao.findById((Long) id);
+        }
+        if (entityClass == Country.class) {
+            return countryDao.findById((Long) id);
+        }
+        if (entityClass == City.class) {
+            return cityDao.findById((Long) id);
+        }
+        throw new IllegalStateException("Unsupported entity class " + entityClass);
+    }
+
+    @Override
+    public List<Class<?>> getEntityTypes() {
+        final List<Class<?>> entityTypes = new LinkedList<Class<?>>();
+        entityTypes.add(User.class);
+        entityTypes.add(Country.class);
+        entityTypes.add(City.class);
+        return entityTypes;
+    }
+
+    @Override
+    public List findAll(final Class<?> entityClass) {
         if (entityClass == User.class) {
             return userDao.findAll();
         }
@@ -94,22 +123,8 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
     }
 
     @Override
-    protected AbstractEntity findById(final Class<?> entityClass, final Long id) {
-        if (entityClass == User.class) {
-            return userDao.findById(id);
-        }
-        if (entityClass == Country.class) {
-            return countryDao.findById(id);
-        }
-        if (entityClass == City.class) {
-            return cityDao.findById(id);
-        }
-        throw new IllegalStateException("Unsupported entity class " + entityClass);
-    }
-
-    @Override
-    protected <T> void customAssertEquals(final T expected, final T actual) {
-        assertEquals(expected, actual);
+    public void customAssertEquals(final Object expected, final Object actual) {
+        Assert.assertEquals(expected, actual);
     }
 
     /**
@@ -152,7 +167,7 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
         uniqueUser.setGender(Gender.MALE);
         uniqueUser.setBirthDate(new Date());
 
-        Address address = new Address();
+        final Address address = new Address();
         address.setCity(city);
         address.setStreet("Street" + uniqueUser);
         address.setStreetNumber("StreetNumber" + uniqueInt);
@@ -173,7 +188,7 @@ public abstract class ExecomCoreTest extends AbstractExecomRepositoryAssert<Abst
     }
 
     protected City createUniqueCity(final Integer unique, final Country country) {
-        City city = new City();
+        final City city = new City();
         city.setCountry(country);
         city.setLatitude("latitude");
         city.setLongitude("longitud");

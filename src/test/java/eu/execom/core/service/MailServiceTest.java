@@ -38,7 +38,7 @@ public class MailServiceTest extends AbstractServiceTest {
         final Map<String, ImageByteArrayDto> files = new HashMap<String, ImageByteArrayDto>();
         final Map<String, Object> variables = new HashMap<String, Object>();
 
-        takeSnapshot();
+        initWizer();
 
         // method
         String toAddress = "email@email.email";

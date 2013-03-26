@@ -1,10 +1,12 @@
 package eu.execom.core.service;
 
-import static eu.execom.testutil.property.Property.changed;
-import static eu.execom.testutil.property.Property.notNull;
-import static eu.execom.testutil.property.Property.nulll;
+import static eu.execom.fabut.Fabut.isNull;
+import static eu.execom.fabut.Fabut.notNull;
+import static eu.execom.fabut.Fabut.value;
 
 import java.util.Date;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +17,7 @@ import eu.execom.core.model.Gender;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
 import eu.execom.core.model.UserStatus;
+import eu.execom.fabut.Fabut;
 
 /**
  * Test {@link RegistrationServiceImpl}.
@@ -22,6 +25,7 @@ import eu.execom.core.model.UserStatus;
  * @author Dusko Vesin
  * 
  */
+@SuppressWarnings("unchecked")
 public class RegistrationServiceTest extends AbstractServiceTest {
 
     private final String email = "email@email.com";
@@ -54,7 +58,7 @@ public class RegistrationServiceTest extends AbstractServiceTest {
     public void testRegster() {
 
         // init
-        takeSnapshot();
+        Fabut.takeSnapshot();
 
         // method
         registrationService.register(dto);
@@ -62,12 +66,12 @@ public class RegistrationServiceTest extends AbstractServiceTest {
         // assert
         assertEmail(email, "Activation mail");
 
-        User user = getUserDao().findByEmail(email);
-        assertObject(user, changed(User.FIRSTNAME, dto.getFirstName()), changed(User.EMAIL, dto.getEmail()),
-                changed(User.LASTNAME, dto.getLastName()), changed(User.STATUS, UserStatus.PENDING_EMAIL_REGISTRATION),
-                nulll(User.AUTHENTICATIONCODE), nulll(User.RECOVERYPASSWORD), notNull(User.ACTIVATIONCODE),
-                changed(User.ROLE, UserRole.USER), notNull(User.ID), notNull(User.PASSWORD), nulll(User.ADDRESS),
-                changed(User.GENDER, dto.getGender()), changed(User.BIRTHDATE, dto.getBirthDate()));
+        final User user = getUserDao().findByEmail(email);
+        Fabut.assertObject(user, value(User.FIRSTNAME, dto.getFirstName()), value(User.EMAIL, dto.getEmail()),
+                value(User.LASTNAME, dto.getLastName()), value(User.STATUS, UserStatus.PENDING_EMAIL_REGISTRATION),
+                isNull(User.AUTHENTICATIONCODE), isNull(User.RECOVERYPASSWORD), notNull(User.ACTIVATIONCODE),
+                value(User.ROLE, UserRole.USER), notNull(User.ID), notNull(User.PASSWORD), isNull(User.ADDRESS),
+                value(User.GENDER, dto.getGender()), value(User.BIRTHDATE, dto.getBirthDate()));
 
     }
 
@@ -82,16 +86,17 @@ public class RegistrationServiceTest extends AbstractServiceTest {
 
         User user = getUserDao().findByEmail(email);
 
-        takeSnapshot();
+        Fabut.takeSnapshot();
+        initWizer();
         // method
-        boolean activateUserWithRegistrationCode = registrationService.activateUserWithActivationCode(user
+        final boolean activateUserWithRegistrationCode = registrationService.activateUserWithActivationCode(user
                 .getActivationCode());
 
         // assert
-        assertTrue(activateUserWithRegistrationCode);
+        Assert.assertTrue(activateUserWithRegistrationCode);
 
         user = getUserDao().findByEmail(email);
-        assertEntityWithSnapshot(user, nulll(User.ACTIVATIONCODE), changed(User.STATUS, UserStatus.ACTIVE));
+        Fabut.assertEntityWithSnapshot(user, isNull(User.ACTIVATIONCODE), value(User.STATUS, UserStatus.ACTIVE));
 
     }
 
@@ -101,12 +106,12 @@ public class RegistrationServiceTest extends AbstractServiceTest {
     @Test
     public void testActivateUserWithActivationCodeNoneExisting() {
 
-        takeSnapshot();
+        initWizer();
         // method
-        boolean successful = registrationService.activateUserWithActivationCode("invalidCode");
+        final boolean successful = registrationService.activateUserWithActivationCode("invalidCode");
 
         // assert
-        assertFalse(successful);
+        Assert.assertFalse(successful);
     }
 
     /**
@@ -117,16 +122,17 @@ public class RegistrationServiceTest extends AbstractServiceTest {
 
         // init
         registrationService.register(dto);
-        takeSnapshot();
+        initWizer();
 
         // method
+        Fabut.takeSnapshot();
         registrationService.resetPassword(dto.getEmail());
 
         // assert
         assertEmail(email, "Password recovery email.");
 
-        User user = getUserDao().findByEmail(email);
-        assertEntityWithSnapshot(user, notNull(User.RECOVERYPASSWORD));
+        final User user = getUserDao().findByEmail(email);
+        Fabut.assertEntityWithSnapshot(user, notNull(User.RECOVERYPASSWORD));
 
     }
 
@@ -136,14 +142,14 @@ public class RegistrationServiceTest extends AbstractServiceTest {
     @Test
     public void testGenerateRandomPassword() {
 
-        takeSnapshot();
+        initWizer();
         // method
 
-        String generateRandomPassword = registrationService.generateRandomPassword();
+        final String generateRandomPassword = registrationService.generateRandomPassword();
 
         // assert
-        assertNotNull(generateRandomPassword);
-        assertEquals(10, generateRandomPassword.length());
+        Assert.assertNotNull(generateRandomPassword);
+        Assert.assertEquals(10, generateRandomPassword.length());
 
     }
 }

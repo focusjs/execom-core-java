@@ -10,6 +10,7 @@ import eu.execom.core.model.Country;
  * 
  * @author Dusko Vesin
  */
+@SuppressWarnings("unchecked")
 public class CityDaoTest extends AbstractDaoTransactionalTest<City> {
 
     private Country country;

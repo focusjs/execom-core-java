@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.mail.MessagingException;
 
+import junit.framework.Assert;
+
 import org.junit.After;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -21,6 +24,7 @@ import eu.execom.core.persistence.PersistenceConfiguration;
  * 
  * @author Dusko Vesin
  */
+@SuppressWarnings("unchecked")
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {TestConfiguration.class,
         PersistenceConfiguration.class, ServiceConfiguration.class,})
 public abstract class AbstractServiceTest extends ExecomCoreTest {
@@ -30,9 +34,8 @@ public abstract class AbstractServiceTest extends ExecomCoreTest {
 
     private List<WiserMessage> assertedMessages = new ArrayList<WiserMessage>();
 
-    @Override
-    protected void takeSnapshot() {
-        super.takeSnapshot();
+    @Before
+    public void initWizer() {
         assertedMessages = new ArrayList<WiserMessage>(wiser.getMessages());
     }
 
@@ -49,7 +52,7 @@ public abstract class AbstractServiceTest extends ExecomCoreTest {
                 message.append(notAssertedMessage.getEnvelopeReceiver()).append(" '")
                         .append(notAssertedMessage.getMimeMessage().getSubject()).append("' ,");
             }
-            assertEquals(message.toString(), assertedMessages.size(), wiser.getMessages().size());
+            Assert.assertEquals(message.toString(), assertedMessages.size(), wiser.getMessages().size());
         }
 
         wiser.getMessages().clear();
@@ -77,7 +80,7 @@ public abstract class AbstractServiceTest extends ExecomCoreTest {
             }
         }
 
-        fail("Email on mail " + email + " is not sent");
+        Assert.fail("Email on mail " + email + " is not sent");
     }
 
     protected void assertEmailNotSent(final String email, final String subject) {
@@ -96,7 +99,7 @@ public abstract class AbstractServiceTest extends ExecomCoreTest {
 
                 if (isValidReceiver && isValidSubject) {
                     assertedMessages.add(wiserMessage);
-                    fail("Email on mail " + email + " is sent");
+                    Assert.fail("Email on mail " + email + " is sent");
                 }
             }
         }

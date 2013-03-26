@@ -9,6 +9,7 @@ import eu.execom.core.model.City;
 import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.persistence.base.GenericDao;
+import eu.execom.fabut.Fabut;
 
 /**
  * Abstract DAO tester. Should be inherited by all test that test any DAO who extends {@link GenericDao}.
@@ -17,6 +18,7 @@ import eu.execom.core.persistence.base.GenericDao;
  * @param <T>
  *            {@link AbstractEntity} type.
  */
+@SuppressWarnings("unchecked")
 public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> extends AbstractPersistanceTest {
 
     /**
@@ -35,16 +37,14 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> ext
         final T createValidObject = createValidObject(1);
         getDao().save(createValidObject);
 
-        takeSnapshot();
         final T byId = getDao().findById(createValidObject.getId());
-        assertObjects(createValidObject, byId);
+        Fabut.assertObjects(createValidObject, byId);
 
     }
 
     /**
      * Test {@link GenericDao#findAll()}.
      */
-    @SuppressWarnings("unchecked")
     @Test
     public void findAll() {
         // init
@@ -56,11 +56,10 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> ext
         getDao().save(object3);
 
         // method
-        takeSnapshot();
         final List<T> all = getDao().findAll();
 
         // assert
-        assertObjects(all, object1, object2, object3);
+        Fabut.assertLists(all, object1, object2, object3);
     };
 
     /**
@@ -72,12 +71,11 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> ext
         getDao().save(createValidObject);
 
         T byId = getDao().findById(createValidObject.getId());
-        assertObjects(createValidObject, byId);
+        Fabut.assertObjects(createValidObject, byId);
 
-        takeSnapshot();
         getDao().update(createValidObject);
         byId = getDao().findById(createValidObject.getId());
-        assertObjects(createValidObject, byId);
+        Fabut.assertObjects(createValidObject, byId);
     }
 
     /**
@@ -90,12 +88,11 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> ext
         getDao().save(createValidObject);
 
         T byId = getDao().findById(createValidObject.getId());
-        assertObjects(createValidObject, byId);
+        Fabut.assertObjects(createValidObject, byId);
 
-        takeSnapshot();
         getDao().saveOrUpdate(createValidObject);
         byId = getDao().findById(createValidObject.getId());
-        assertObjects(createValidObject, byId);
+        Fabut.assertObjects(createValidObject, byId);
     };
 
     /**
@@ -106,9 +103,9 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> ext
         final T createValidObject = createValidObject(1);
         getDao().save(createValidObject);
 
-        takeSnapshot();
+        Fabut.takeSnapshot();
         getDao().delete(createValidObject);
-        assertEntityAsDeleted(createValidObject);
+        Fabut.assertEntityAsDeleted(createValidObject);
     }
 
     /**
@@ -119,10 +116,10 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> ext
         final T createValidObject = createValidObject(1);
         getDao().save(createValidObject);
 
-        takeSnapshot();
+        Fabut.takeSnapshot();
         getDao().deleteById(createValidObject.getId());
 
-        assertEntityAsDeleted(createValidObject);
+        Fabut.assertEntityAsDeleted(createValidObject);
     }
 
     /**

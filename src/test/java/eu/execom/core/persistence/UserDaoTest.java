@@ -11,6 +11,7 @@ import eu.execom.core.model.City;
 import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
+import eu.execom.fabut.Fabut;
 
 /**
  * {@link UserHibernateDao} test.
@@ -51,31 +52,30 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
     public void testUsersCountInContriesPerRoleWithCountries() {
 
         // preparing data
-        Country country2 = createUniqueCountry(2);
+        final Country country2 = createUniqueCountry(2);
         getCountryDao().save(country2);
 
-        City city2 = createUniqueCity(2, country2);
+        final City city2 = createUniqueCity(2, country2);
         getCityDao().save(city2);
 
-        User user1 = createUniqueUser(1, city);
+        final User user1 = createUniqueUser(1, city);
         getUserDao().save(user1);
 
-        User user2 = createUniqueUser(2, city2);
+        final User user2 = createUniqueUser(2, city2);
         getUserDao().save(user2);
 
-        ArrayList<Country> countries = new ArrayList<Country>();
+        final ArrayList<Country> countries = new ArrayList<Country>();
         countries.add(country);
 
-        takeSnapshot();
-
         // call method
-        List<UsersTypeCountDto> userCountInCountriesPerRole = getUserDao().getUserCountInCountriesPerRole(countries);
+        final List<UsersTypeCountDto> userCountInCountriesPerRole = getUserDao().getUserCountInCountriesPerRole(
+                countries);
 
         // assert
-        UsersTypeCountDto usersTypeCountDto = new UsersTypeCountDto();
+        final UsersTypeCountDto usersTypeCountDto = new UsersTypeCountDto();
         usersTypeCountDto.setCount(1L);
         usersTypeCountDto.setRole(UserRole.USER);
-        assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
+        Fabut.assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
     }
 
     /**
@@ -85,28 +85,26 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
     public void testUsersCountInContriesPerRoleWithotCountries() {
 
         // preparing data
-        Country country2 = createUniqueCountry(2);
+        final Country country2 = createUniqueCountry(2);
         getCountryDao().save(country2);
 
-        City city2 = createUniqueCity(2, country2);
+        final City city2 = createUniqueCity(2, country2);
         getCityDao().save(city2);
 
-        User user1 = createUniqueUser(1, city);
+        final User user1 = createUniqueUser(1, city);
         getUserDao().save(user1);
 
-        User user2 = createUniqueUser(2, city2);
+        final User user2 = createUniqueUser(2, city2);
         getUserDao().save(user2);
 
-        takeSnapshot();
-
         // call method
-        List<UsersTypeCountDto> userCountInCountriesPerRole = getUserDao().getUserCountInCountriesPerRole(null);
+        final List<UsersTypeCountDto> userCountInCountriesPerRole = getUserDao().getUserCountInCountriesPerRole(null);
 
         // assert
-        UsersTypeCountDto usersTypeCountDto = new UsersTypeCountDto();
+        final UsersTypeCountDto usersTypeCountDto = new UsersTypeCountDto();
         usersTypeCountDto.setCount(2L);
         usersTypeCountDto.setRole(UserRole.USER);
-        assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
+        Fabut.assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
     }
 
     /**
@@ -116,28 +114,27 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
     public void test() {
 
         // prepare data
-        User user1 = createUniqueUser(1, city);
+        final User user1 = createUniqueUser(1, city);
         user1.setRole(UserRole.USER);
         getUserDao().save(user1);
 
-        User user2 = createUniqueUser(2, city);
+        final User user2 = createUniqueUser(2, city);
         user2.setRole(UserRole.ADMIN);
         getUserDao().save(user2);
 
-        User user3 = createUniqueUser(3, city);
+        final User user3 = createUniqueUser(3, city);
         user3.setRole(UserRole.USER);
         getUserDao().save(user3);
 
-        User user4 = createUniqueUser(4, city);
+        final User user4 = createUniqueUser(4, city);
         user4.setRole(UserRole.ADMIN);
         getUserDao().save(user4);
 
-        takeSnapshot();
         // method
-        List<User> users = getUserDao().findAllAdminsFirst();
+        final List<User> users = getUserDao().findAllAdminsFirst();
 
         // assert
-        assertObjects(users, user4, user2, user3, user1);
+        Fabut.assertLists(users, user4, user2, user3, user1);
 
     }
 }

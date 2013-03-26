@@ -1,8 +1,9 @@
 package eu.execom.core.service;
 
-import static eu.execom.testutil.property.Property.changed;
-import static eu.execom.testutil.property.Property.notNull;
-import static eu.execom.testutil.property.Property.nulll;
+import static eu.execom.fabut.Fabut.isNull;
+import static eu.execom.fabut.Fabut.notNull;
+import static eu.execom.fabut.Fabut.value;
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
 import eu.execom.core.model.UserStatus;
+import eu.execom.fabut.Fabut;
 
 /**
  * Contains tests for authentication service.
@@ -78,11 +80,11 @@ public class UserServiceTest extends AbstractServiceTest {
         userSearchDto.setRole(UserRole.USER);
 
         // method
-        takeSnapshot();
+        initWizer();
         final SearchResultDto<UserTableDto> searchResult = userService.search(userSearchDto);
 
         // assert
-        assertObjects(searchResult.getResults(), convertUserToTableDto(user2), convertUserToTableDto(user3),
+        Fabut.assertLists(searchResult.getResults(), convertUserToTableDto(user2), convertUserToTableDto(user3),
                 convertUserToTableDto(user4), convertUserToTableDto(user5));
     }
 
@@ -92,23 +94,23 @@ public class UserServiceTest extends AbstractServiceTest {
     @Test
     public void testAdd() {
         // init
-        UserAddDto addUserDto = createUniqueAddUserDto(1);
+        final UserAddDto addUserDto = createUniqueAddUserDto(1);
 
         // method
-        takeSnapshot();
+        initWizer();
         userService.add(addUserDto);
 
         // assert
-        assertObjects(getUserDao().findAllCount(), Long.valueOf(1));
+        Fabut.assertObjects(getUserDao().findAllCount(), Long.valueOf(1));
 
         final User user = getUserDao().findByRole(UserRole.USER).get(0);
-        assertObject(user, changed(User.FIRSTNAME, addUserDto.getFirstName()),
-                changed(User.EMAIL, addUserDto.getEmail()), changed(User.GENDER, addUserDto.getGender()),
-                changed(User.LASTNAME, addUserDto.getLastName()),
-                changed(User.STATUS, UserStatus.PENDING_EMAIL_REGISTRATION), nulll(User.AUTHENTICATIONCODE),
-                nulll(User.RECOVERYPASSWORD), nulll(User.ADDRESS), nulll(User.ACTIVATIONCODE),
-                changed(User.ROLE, addUserDto.getRole()), notNull(User.ID), notNull(User.PASSWORD),
-                changed(User.BIRTHDATE, addUserDto.getBirthDate()));
+        Fabut.assertObject(user, value(User.FIRSTNAME, addUserDto.getFirstName()),
+                value(User.EMAIL, addUserDto.getEmail()), value(User.GENDER, addUserDto.getGender()),
+                value(User.LASTNAME, addUserDto.getLastName()),
+                value(User.STATUS, UserStatus.PENDING_EMAIL_REGISTRATION), isNull(User.AUTHENTICATIONCODE),
+                isNull(User.RECOVERYPASSWORD), isNull(User.ADDRESS), isNull(User.ACTIVATIONCODE),
+                value(User.ROLE, addUserDto.getRole()), notNull(User.ID), notNull(User.PASSWORD),
+                value(User.BIRTHDATE, addUserDto.getBirthDate()));
 
     }
 
@@ -126,17 +128,18 @@ public class UserServiceTest extends AbstractServiceTest {
         userEditDto.setId(editUser.getId());
 
         // method
-        takeSnapshot();
+        Fabut.takeSnapshot();
+        initWizer();
         userService.edit(userEditDto);
 
         // assert
         final User editUserLoaded = getUserDao().findById(userEditDto.getId());
 
-        assertEntityWithSnapshot(editUserLoaded, changed(User.FIRSTNAME, userEditDto.getFirstName()),
-                changed(User.LASTNAME, userEditDto.getLastName()), notNull(User.PASSWORD),
-                changed(User.STATUS, editUser.getStatus()), changed(User.ID, userEditDto.getId()),
-                changed(User.ROLE, userEditDto.getRole()), changed(User.GENDER, userEditDto.getGender()),
-                changed(User.BIRTHDATE, userEditDto.getBirthDate()));
+        Fabut.assertEntityWithSnapshot(editUserLoaded, value(User.FIRSTNAME, userEditDto.getFirstName()),
+                value(User.LASTNAME, userEditDto.getLastName()), notNull(User.PASSWORD),
+                value(User.STATUS, editUser.getStatus()), value(User.ID, userEditDto.getId()),
+                value(User.ROLE, userEditDto.getRole()), value(User.GENDER, userEditDto.getGender()),
+                value(User.BIRTHDATE, userEditDto.getBirthDate()));
     }
 
     /**
@@ -149,15 +152,15 @@ public class UserServiceTest extends AbstractServiceTest {
         getUserDao().save(user);
 
         // method
-        takeSnapshot();
+        initWizer();
         final UserEditDto userEditDtoByUsername = userService.getEditDto(user.getId());
 
         // assert
-        assertObject(userEditDtoByUsername, changed(UserEditDto.ID, user.getId()),
-                changed(UserEditDto.FIRSTNAME, user.getFirstName()), changed(UserEditDto.LASTNAME, user.getLastName()),
-                changed(UserEditDto.PASSWORD, user.getPassword()), changed(UserEditDto.PASSWORDRE, user.getPassword()),
-                changed(UserEditDto.STATUS, user.getStatus()), changed(UserEditDto.ROLE, user.getRole()),
-                changed(UserEditDto.GENDER, user.getGender()), changed(UserEditDto.BIRTHDATE, user.getBirthDate()));
+        Fabut.assertObject(userEditDtoByUsername, value(UserEditDto.ID, user.getId()),
+                value(UserEditDto.FIRSTNAME, user.getFirstName()), value(UserEditDto.LASTNAME, user.getLastName()),
+                value(UserEditDto.PASSWORD, user.getPassword()), value(UserEditDto.PASSWORDRE, user.getPassword()),
+                value(UserEditDto.STATUS, user.getStatus()), value(UserEditDto.ROLE, user.getRole()),
+                value(UserEditDto.GENDER, user.getGender()), value(UserEditDto.BIRTHDATE, user.getBirthDate()));
     }
 
     /**
@@ -171,10 +174,10 @@ public class UserServiceTest extends AbstractServiceTest {
         getUserDao().save(user);
 
         // method
-        takeSnapshot();
+        initWizer();
         final boolean isSmailInUse = userService.isEmailInUse(user.getEmail());
 
-        assertTrue(isSmailInUse);
+        Assert.assertTrue(isSmailInUse);
     }
 
     /**
@@ -188,10 +191,10 @@ public class UserServiceTest extends AbstractServiceTest {
         getUserDao().save(user);
 
         // method
-        takeSnapshot();
+        initWizer();
         final boolean isSmailInUse = userService.isEmailInUse("Invalid email");
 
-        assertFalse(isSmailInUse);
+        Assert.assertFalse(isSmailInUse);
     }
 
     /**
@@ -205,10 +208,10 @@ public class UserServiceTest extends AbstractServiceTest {
         getUserDao().save(user);
 
         // method
-        takeSnapshot();
+        initWizer();
         final boolean isSmailInUse = userService.isActivationCodeInUse(user.getActivationCode());
 
-        assertTrue(isSmailInUse);
+        Assert.assertTrue(isSmailInUse);
     }
 
     /**
@@ -222,10 +225,10 @@ public class UserServiceTest extends AbstractServiceTest {
         getUserDao().save(user);
 
         // method
-        takeSnapshot();
+        initWizer();
         final boolean isSmailInUse = userService.isActivationCodeInUse("Invalid email");
 
-        assertFalse(isSmailInUse);
+        Assert.assertFalse(isSmailInUse);
     }
 
     /**
@@ -239,10 +242,10 @@ public class UserServiceTest extends AbstractServiceTest {
         getUserDao().save(user);
 
         // method
-        takeSnapshot();
+        initWizer();
         final boolean isSmailInUse = userService.isAuthenticationCodeInUse(user.getAuthenticationCode());
 
-        assertTrue(isSmailInUse);
+        Assert.assertTrue(isSmailInUse);
     }
 
     /**
@@ -256,10 +259,10 @@ public class UserServiceTest extends AbstractServiceTest {
         getUserDao().save(user);
 
         // method
-        takeSnapshot();
+        initWizer();
         final boolean isSmailInUse = userService.isAuthenticationCodeInUse("Invalid email");
 
-        assertFalse(isSmailInUse);
+        Assert.assertFalse(isSmailInUse);
     }
 
 }
