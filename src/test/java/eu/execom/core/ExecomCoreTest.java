@@ -6,7 +6,6 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,7 @@ import eu.execom.core.model.UserStatus;
 import eu.execom.core.persistence.CityDao;
 import eu.execom.core.persistence.CountryDao;
 import eu.execom.core.persistence.UserDao;
+import eu.execom.fabut.AbstractFabutTest;
 import eu.execom.fabut.Fabut;
 import eu.execom.fabut.IFabutRepositoryTest;
 
@@ -44,7 +44,7 @@ import eu.execom.fabut.IFabutRepositoryTest;
 @TransactionConfiguration(defaultRollback = true)
 @Transactional
 @EnableTransactionManagement(proxyTargetClass = true)
-public abstract class ExecomCoreTest implements IFabutRepositoryTest {
+public abstract class ExecomCoreTest extends AbstractFabutTest implements IFabutRepositoryTest {
 
     @Autowired
     private UserDao userDao;
@@ -59,12 +59,6 @@ public abstract class ExecomCoreTest implements IFabutRepositoryTest {
     @Before
     public void beforeTest() {
         Fabut.beforeTest(this);
-    }
-
-    @Override
-    @After
-    public void afterTest() {
-        Fabut.afterTest();
     }
 
     @Override
@@ -109,7 +103,7 @@ public abstract class ExecomCoreTest implements IFabutRepositoryTest {
     }
 
     @Override
-    public List findAll(final Class<?> entityClass) {
+    public List<?> findAll(final Class<?> entityClass) {
         if (entityClass == User.class) {
             return userDao.findAll();
         }

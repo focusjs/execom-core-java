@@ -24,7 +24,6 @@ import eu.execom.core.persistence.PersistenceConfiguration;
  * 
  * @author Dusko Vesin
  */
-@SuppressWarnings("unchecked")
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {TestConfiguration.class,
         PersistenceConfiguration.class, ServiceConfiguration.class,})
 public abstract class AbstractServiceTest extends ExecomCoreTest {

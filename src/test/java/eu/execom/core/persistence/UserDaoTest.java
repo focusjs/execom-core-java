@@ -11,7 +11,6 @@ import eu.execom.core.model.City;
 import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
-import eu.execom.fabut.Fabut;
 
 /**
  * {@link UserHibernateDao} test.
@@ -75,7 +74,7 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
         final UsersTypeCountDto usersTypeCountDto = new UsersTypeCountDto();
         usersTypeCountDto.setCount(1L);
         usersTypeCountDto.setRole(UserRole.USER);
-        Fabut.assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
+        assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
     }
 
     /**
@@ -104,7 +103,7 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
         final UsersTypeCountDto usersTypeCountDto = new UsersTypeCountDto();
         usersTypeCountDto.setCount(2L);
         usersTypeCountDto.setRole(UserRole.USER);
-        Fabut.assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
+        assertObjects(userCountInCountriesPerRole, usersTypeCountDto);
     }
 
     /**
@@ -134,7 +133,7 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
         final List<User> users = getUserDao().findAllAdminsFirst();
 
         // assert
-        Fabut.assertLists(users, user4, user2, user3, user1);
+        assertLists(users, user4, user2, user3, user1);
 
     }
 }

@@ -18,7 +18,6 @@ import eu.execom.fabut.Fabut;
  * @param <T>
  *            {@link AbstractEntity} type.
  */
-@SuppressWarnings("unchecked")
 public abstract class AbstractDaoTransactionalTest<T extends AbstractEntity> extends AbstractPersistanceTest {
 
     /**

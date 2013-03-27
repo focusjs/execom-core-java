@@ -1,9 +1,5 @@
 package eu.execom.core.service;
 
-import static eu.execom.fabut.Fabut.isNull;
-import static eu.execom.fabut.Fabut.notNull;
-import static eu.execom.fabut.Fabut.value;
-
 import java.util.Date;
 
 import junit.framework.Assert;
@@ -18,7 +14,6 @@ import eu.execom.core.dto.authentication.CredentialsDto;
 import eu.execom.core.dto.authentication.RegistrationDto;
 import eu.execom.core.model.Gender;
 import eu.execom.core.model.User;
-import eu.execom.fabut.Fabut;
 
 /**
  * Contains tests for authentication service.
@@ -61,9 +56,6 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         initWizer();
     }
 
-    @Autowired
-    private UserService userService;
-
     /**
      * Tests method {@link AuthenticationService#authenticate(CredentialsDto)} with valid credentials.
      * 
@@ -78,17 +70,16 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         loginDto.setPassword(PASSWORD);
 
         // method
-        Fabut.takeSnapshot();
+        takeSnapshot();
         initWizer();
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         final User user = getUserDao().findByEmail(EMAIL);
         // assert
-        Fabut.assertEntityWithSnapshot(user, notNull(User.AUTHENTICATIONCODE));
+        assertEntityWithSnapshot(user, notNull(User.AUTHENTICATIONCODE));
 
         Assert.assertNotNull(response);
-        Fabut.assertObject(response,
-                value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
+        assertObject(response, value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
                 value(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
                 value(AuthenticationResponseDto.ROLE, user.getRole()));
 
@@ -153,7 +144,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         loginDto.setPassword(newPassword);
 
         // method
-        Fabut.takeSnapshot();
+        takeSnapshot();
         initWizer();
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
@@ -161,12 +152,11 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         final User user = getUserDao().findByEmail(EMAIL);
 
         Assert.assertNotNull(response);
-        Fabut.assertObject(response,
-                value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
+        assertObject(response, value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
                 value(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
                 value(AuthenticationResponseDto.ROLE, user.getRole()));
 
-        Fabut.assertEntityWithSnapshot(user, isNull(User.RECOVERYPASSWORD), notNull(User.AUTHENTICATIONCODE),
+        assertEntityWithSnapshot(user, isNull(User.RECOVERYPASSWORD), notNull(User.AUTHENTICATIONCODE),
                 value(User.PASSWORD, passwordEncoder.encodePassword(newPassword, EMAIL)));
 
     }
@@ -195,8 +185,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         // assert
         Assert.assertNotNull(response);
-        Fabut.assertObject(response,
-                value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
+        assertObject(response, value(AuthenticationResponseDto.NAME, user.getFirstName() + " " + user.getLastName()),
                 value(AuthenticationResponseDto.AUTHENTICATIONCODE, user.getAuthenticationCode()),
                 value(AuthenticationResponseDto.ROLE, user.getRole()));
 
@@ -232,12 +221,12 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         // method
-        Fabut.takeSnapshot();
+        takeSnapshot();
         initWizer();
         authenticationServiceImpl.logout(response.getAuthenticationCode());
 
         // assert
-        Fabut.assertEntityWithSnapshot(user, isNull(User.AUTHENTICATIONCODE));
+        assertEntityWithSnapshot(user, isNull(User.AUTHENTICATIONCODE));
     }
 
 }

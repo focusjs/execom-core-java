@@ -1,8 +1,5 @@
 package eu.execom.core.service;
 
-import static eu.execom.fabut.Fabut.isNull;
-import static eu.execom.fabut.Fabut.notNull;
-import static eu.execom.fabut.Fabut.value;
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -20,7 +17,6 @@ import eu.execom.core.model.Country;
 import eu.execom.core.model.User;
 import eu.execom.core.model.UserRole;
 import eu.execom.core.model.UserStatus;
-import eu.execom.fabut.Fabut;
 
 /**
  * Contains tests for authentication service.
@@ -84,7 +80,7 @@ public class UserServiceTest extends AbstractServiceTest {
         final SearchResultDto<UserTableDto> searchResult = userService.search(userSearchDto);
 
         // assert
-        Fabut.assertLists(searchResult.getResults(), convertUserToTableDto(user2), convertUserToTableDto(user3),
+        assertLists(searchResult.getResults(), convertUserToTableDto(user2), convertUserToTableDto(user3),
                 convertUserToTableDto(user4), convertUserToTableDto(user5));
     }
 
@@ -101,12 +97,11 @@ public class UserServiceTest extends AbstractServiceTest {
         userService.add(addUserDto);
 
         // assert
-        Fabut.assertObjects(getUserDao().findAllCount(), Long.valueOf(1));
+        assertObjects(getUserDao().findAllCount(), Long.valueOf(1));
 
         final User user = getUserDao().findByRole(UserRole.USER).get(0);
-        Fabut.assertObject(user, value(User.FIRSTNAME, addUserDto.getFirstName()),
-                value(User.EMAIL, addUserDto.getEmail()), value(User.GENDER, addUserDto.getGender()),
-                value(User.LASTNAME, addUserDto.getLastName()),
+        assertObject(user, value(User.FIRSTNAME, addUserDto.getFirstName()), value(User.EMAIL, addUserDto.getEmail()),
+                value(User.GENDER, addUserDto.getGender()), value(User.LASTNAME, addUserDto.getLastName()),
                 value(User.STATUS, UserStatus.PENDING_EMAIL_REGISTRATION), isNull(User.AUTHENTICATIONCODE),
                 isNull(User.RECOVERYPASSWORD), isNull(User.ADDRESS), isNull(User.ACTIVATIONCODE),
                 value(User.ROLE, addUserDto.getRole()), notNull(User.ID), notNull(User.PASSWORD),
@@ -128,14 +123,14 @@ public class UserServiceTest extends AbstractServiceTest {
         userEditDto.setId(editUser.getId());
 
         // method
-        Fabut.takeSnapshot();
+        takeSnapshot();
         initWizer();
         userService.edit(userEditDto);
 
         // assert
         final User editUserLoaded = getUserDao().findById(userEditDto.getId());
 
-        Fabut.assertEntityWithSnapshot(editUserLoaded, value(User.FIRSTNAME, userEditDto.getFirstName()),
+        assertEntityWithSnapshot(editUserLoaded, value(User.FIRSTNAME, userEditDto.getFirstName()),
                 value(User.LASTNAME, userEditDto.getLastName()), notNull(User.PASSWORD),
                 value(User.STATUS, editUser.getStatus()), value(User.ID, userEditDto.getId()),
                 value(User.ROLE, userEditDto.getRole()), value(User.GENDER, userEditDto.getGender()),
@@ -156,7 +151,7 @@ public class UserServiceTest extends AbstractServiceTest {
         final UserEditDto userEditDtoByUsername = userService.getEditDto(user.getId());
 
         // assert
-        Fabut.assertObject(userEditDtoByUsername, value(UserEditDto.ID, user.getId()),
+        assertObject(userEditDtoByUsername, value(UserEditDto.ID, user.getId()),
                 value(UserEditDto.FIRSTNAME, user.getFirstName()), value(UserEditDto.LASTNAME, user.getLastName()),
                 value(UserEditDto.PASSWORD, user.getPassword()), value(UserEditDto.PASSWORDRE, user.getPassword()),
                 value(UserEditDto.STATUS, user.getStatus()), value(UserEditDto.ROLE, user.getRole()),
