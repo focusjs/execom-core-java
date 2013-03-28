@@ -52,6 +52,7 @@ public class RegistrationServiceTest extends AbstractServiceTest {
     public void testRegster() {
 
         // init
+        initWizer();
         takeSnapshot();
 
         // method
@@ -80,8 +81,8 @@ public class RegistrationServiceTest extends AbstractServiceTest {
 
         User user = getUserDao().findByEmail(email);
 
-        takeSnapshot();
         initWizer();
+        takeSnapshot();
         // method
         final boolean activateUserWithRegistrationCode = registrationService.activateUserWithActivationCode(user
                 .getActivationCode());
@@ -101,6 +102,7 @@ public class RegistrationServiceTest extends AbstractServiceTest {
     public void testActivateUserWithActivationCodeNoneExisting() {
 
         initWizer();
+        takeSnapshot();
         // method
         final boolean successful = registrationService.activateUserWithActivationCode("invalidCode");
 
@@ -117,9 +119,9 @@ public class RegistrationServiceTest extends AbstractServiceTest {
         // init
         registrationService.register(dto);
         initWizer();
+        takeSnapshot();
 
         // method
-        takeSnapshot();
         registrationService.resetPassword(dto.getEmail());
 
         // assert
@@ -137,6 +139,7 @@ public class RegistrationServiceTest extends AbstractServiceTest {
     public void testGenerateRandomPassword() {
 
         initWizer();
+        takeSnapshot();
         // method
 
         final String generateRandomPassword = registrationService.generateRandomPassword();

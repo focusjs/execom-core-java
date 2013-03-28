@@ -38,11 +38,11 @@ public class MailServiceTest extends AbstractServiceTest {
         final Map<String, ImageByteArrayDto> files = new HashMap<String, ImageByteArrayDto>();
         final Map<String, Object> variables = new HashMap<String, Object>();
 
-        initWizer();
-
         // method
-        String toAddress = "email@email.email";
-        String subject = "subject";
+        final String toAddress = "email@email.email";
+        final String subject = "subject";
+        initWizer();
+        takeSnapshot();
         mailService.sendEmail(toAddress, "toName", subject, variables, files, new TemplateGenerator() {
 
             @Override

@@ -77,6 +77,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final SearchResultDto<UserTableDto> searchResult = userService.search(userSearchDto);
 
         // assert
@@ -94,6 +95,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         userService.add(addUserDto);
 
         // assert
@@ -123,8 +125,8 @@ public class UserServiceTest extends AbstractServiceTest {
         userEditDto.setId(editUser.getId());
 
         // method
-        takeSnapshot();
         initWizer();
+        takeSnapshot();
         userService.edit(userEditDto);
 
         // assert
@@ -148,6 +150,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final UserEditDto userEditDtoByUsername = userService.getEditDto(user.getId());
 
         // assert
@@ -170,6 +173,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final boolean isSmailInUse = userService.isEmailInUse(user.getEmail());
 
         Assert.assertTrue(isSmailInUse);
@@ -187,6 +191,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final boolean isSmailInUse = userService.isEmailInUse("Invalid email");
 
         Assert.assertFalse(isSmailInUse);
@@ -204,6 +209,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final boolean isSmailInUse = userService.isActivationCodeInUse(user.getActivationCode());
 
         Assert.assertTrue(isSmailInUse);
@@ -221,6 +227,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final boolean isSmailInUse = userService.isActivationCodeInUse("Invalid email");
 
         Assert.assertFalse(isSmailInUse);
@@ -238,6 +245,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final boolean isSmailInUse = userService.isAuthenticationCodeInUse(user.getAuthenticationCode());
 
         Assert.assertTrue(isSmailInUse);
@@ -255,6 +263,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
+        takeSnapshot();
         final boolean isSmailInUse = userService.isAuthenticationCodeInUse("Invalid email");
 
         Assert.assertFalse(isSmailInUse);
