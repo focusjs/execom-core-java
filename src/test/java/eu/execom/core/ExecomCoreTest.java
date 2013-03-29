@@ -21,6 +21,7 @@ import eu.execom.core.dto.UserTableDto;
 import eu.execom.core.dto.UsersTypeCountDto;
 import eu.execom.core.dto.authentication.AuthenticationResponseDto;
 import eu.execom.core.dto.authentication.CredentialsDto;
+import eu.execom.core.dto.authentication.RegistrationDto;
 import eu.execom.core.model.Address;
 import eu.execom.core.model.City;
 import eu.execom.core.model.Country;
@@ -57,7 +58,7 @@ public abstract class ExecomCoreTest extends AbstractFabutTest implements IFabut
 
     @Override
     @Before
-    public void beforeTest() {
+    public void fabutBeforeTest() {
         Fabut.beforeTest(this);
     }
 
@@ -71,6 +72,7 @@ public abstract class ExecomCoreTest extends AbstractFabutTest implements IFabut
         complexTypes.add(UserSearchDto.class);
         complexTypes.add(UserTableDto.class);
         complexTypes.add(UsersTypeCountDto.class);
+        complexTypes.add(RegistrationDto.class);
         return complexTypes;
     }
 

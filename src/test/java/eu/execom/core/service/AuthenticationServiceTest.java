@@ -71,7 +71,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(loginDto);
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         final User user = getUserDao().findByEmail(EMAIL);
@@ -100,7 +100,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(loginDto);
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         // assert
@@ -123,7 +123,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(loginDto);
         authenticationServiceImpl.authenticate(loginDto);
 
         // assert
@@ -147,7 +147,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(loginDto);
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(loginDto);
 
         // assert
@@ -182,7 +182,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
         final User user = getUserDao().findByEmail(EMAIL);
 
         initWizer();
-        takeSnapshot();
+        takeSnapshot(loginDto);
         // method
         final AuthenticationResponseDto response = authenticationServiceImpl.authenticate(user.getAuthenticationCode());
 
@@ -225,7 +225,7 @@ public class AuthenticationServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(loginDto);
         authenticationServiceImpl.logout(response.getAuthenticationCode());
 
         // assert

@@ -50,7 +50,7 @@ public class PersistenceConfiguration {
             @Value("${jdbc.username}") final String useraname, @Value("${jdbc.password}") final String password)
             throws PropertyVetoException {
 
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+        final ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass(driver);
         dataSource.setJdbcUrl(url);
         dataSource.setUser(useraname);
@@ -72,12 +72,13 @@ public class PersistenceConfiguration {
     @Bean
     public LocalSessionFactoryBean sessionFactoryBean(final SpringLiquibase liquibase,
             @Value("${hibernate.dialect}") final String dialect, final DataSource dataSource) {
-        Properties props = new Properties();
+        final Properties props = new Properties();
         props.put("hibernate.dialect", dialect);
         props.put("hibernate.format_sql", "true");
+        props.put("hibernate.show_sql", "false");
         props.put("hibernate.hbm2ddl.auto", "validate");
 
-        LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
+        final LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
         bean.setAnnotatedClasses(new Class[] {User.class, Country.class, City.class});
         bean.setHibernateProperties(props);
         bean.setDataSource(dataSource);
@@ -105,7 +106,7 @@ public class PersistenceConfiguration {
      */
     @Bean
     public SpringLiquibase liquiBase(final DataSource dataSource) {
-        SpringLiquibase liquibase = new SpringLiquibase();
+        final SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setContexts("test, production");
         liquibase.setChangeLog("classpath:META-INF/db/db-changelog.xml");
         liquibase.setDataSource(dataSource);

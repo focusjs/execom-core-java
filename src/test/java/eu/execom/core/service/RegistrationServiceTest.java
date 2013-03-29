@@ -53,7 +53,7 @@ public class RegistrationServiceTest extends AbstractServiceTest {
 
         // init
         initWizer();
-        takeSnapshot();
+        takeSnapshot(dto);
 
         // method
         registrationService.register(dto);
@@ -82,7 +82,7 @@ public class RegistrationServiceTest extends AbstractServiceTest {
         User user = getUserDao().findByEmail(email);
 
         initWizer();
-        takeSnapshot();
+        takeSnapshot(dto);
         // method
         final boolean activateUserWithRegistrationCode = registrationService.activateUserWithActivationCode(user
                 .getActivationCode());

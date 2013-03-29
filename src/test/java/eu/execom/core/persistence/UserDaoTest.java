@@ -97,6 +97,7 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
         getUserDao().save(user2);
 
         // call method
+        takeSnapshot(user1, user2, country2);
         final List<UsersTypeCountDto> userCountInCountriesPerRole = getUserDao().getUserCountInCountriesPerRole(null);
 
         // assert
@@ -130,6 +131,7 @@ public class UserDaoTest extends AbstractDaoTransactionalTest<User> {
         getUserDao().save(user4);
 
         // method
+        takeSnapshot(user1, user2, user3, user4);
         final List<User> users = getUserDao().findAllAdminsFirst();
 
         // assert

@@ -77,7 +77,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(userSearchDto);
         final SearchResultDto<UserTableDto> searchResult = userService.search(userSearchDto);
 
         // assert
@@ -95,7 +95,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(addUserDto);
         userService.add(addUserDto);
 
         // assert
@@ -126,7 +126,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
         // method
         initWizer();
-        takeSnapshot();
+        takeSnapshot(userEditDto);
         userService.edit(userEditDto);
 
         // assert
