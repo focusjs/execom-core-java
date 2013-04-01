@@ -13,3 +13,4 @@ war/
 test-output/
 vp-test-output/
 .metadata/
+.springBeans
