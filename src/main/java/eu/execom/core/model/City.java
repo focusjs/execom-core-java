@@ -19,8 +19,6 @@ import javax.persistence.UniqueConstraint;
         @UniqueConstraint(columnNames = {City.POSTAL_CODE, City.COUNTRY})})
 public class City extends AbstractEntity {
 
-    public static final String DOT = ".";
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country", nullable = false)
     private Country country;
