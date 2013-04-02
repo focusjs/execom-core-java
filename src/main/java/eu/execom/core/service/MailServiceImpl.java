@@ -84,12 +84,10 @@ class MailServiceImpl implements MailService {
             LOG.debug(EMAIL_SUCCESSFULLY_SENT);
         } catch (final EmailException e) {
             LOG.error(ERROR_WHILE_SENDING_EMAIL, e.getMessage());
-            e.printStackTrace();
         } catch (final UnsupportedEncodingException e) {
             LOG.error(ERROR_WHILE_SENDING_EMAIL, e.getMessage());
-            e.printStackTrace();
         } catch (final TemplateGeneratorExcpetion e) {
-            e.printStackTrace();
+            LOG.error(ERROR_WHILE_SENDING_EMAIL, e.getMessage());
             throw new IllegalStateException(e);
 
         }

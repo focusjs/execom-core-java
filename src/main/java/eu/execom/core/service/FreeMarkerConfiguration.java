@@ -2,6 +2,7 @@ package eu.execom.core.service;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;
@@ -34,7 +35,7 @@ public class FreeMarkerConfiguration {
         freeMarkerSettings.setProperty("whitespace_stripping", "true");
         freeMarkerConfigurationFactoryBean.setFreemarkerSettings(freeMarkerSettings);
 
-        HashMap<String, Object> variables = new HashMap<String, Object>();
+        Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("xml_escape", xmlEscape);
         variables.put("html_escape", htmlEscape);
         freeMarkerConfigurationFactoryBean.setFreemarkerVariables(variables);

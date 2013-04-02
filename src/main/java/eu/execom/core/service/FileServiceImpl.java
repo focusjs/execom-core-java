@@ -19,8 +19,6 @@ import eu.execom.core.dto.AbstractDto;
 @Service
 class FileServiceImpl {
 
-    private static final int BUFFER_SIZE = 1024;
-    private static final String UNABLE_TO_PROCESS_FILE = "Unable to process file ";
     private static final Logger LOG = LoggerFactory.getLogger(FileServiceImpl.class);
     private final ImageByteArrayDto emailHeader;
 
