@@ -39,8 +39,6 @@ class MailServiceImpl implements MailService {
     private static final Logger LOG = LoggerFactory.getLogger(MailServiceImpl.class);
 
     @Autowired
-    private UserService userServiceHelper;
-    @Autowired
     private UserDao userDao;
 
     @Value("${mail.smtp.host}")

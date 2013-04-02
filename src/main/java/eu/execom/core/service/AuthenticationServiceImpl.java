@@ -27,7 +27,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Override
     public AuthenticationResponseDto authenticate(final String authetnicationCode) throws AuthenticationException {
