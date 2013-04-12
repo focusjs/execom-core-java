@@ -6,9 +6,6 @@ target/
 .project
 *.class
 *.tmp
-BluVela.log*
-BluVelaClient.log*
-BluVelaAdmin.log*
 war/
 test-output/
 vp-test-output/
